@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import express from "express";
+export const router = express.Router();
 
 // @route     GET api/locations
 // @desc      Get all users contacts
@@ -29,4 +29,4 @@ router.delete("/:id", (req, res) => {
   res.send("Delete location");
 });
 
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import express from "express";
+export const router = express.Router();
 
 // @route     GET api/auth
 // @desc      Get logged in user
@@ -15,4 +15,4 @@ router.get("/", (req, res) => {
   res.send("Log in user");
 });
 
-module.exports = router;
+export default router;
