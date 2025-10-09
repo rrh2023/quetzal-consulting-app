@@ -22,4 +22,5 @@ export const connectDB = async () => {
     //   useFindAndModify: false,
   });
 };
+
 export default connectDB;

@@ -1,13 +1,16 @@
 import express from "express";
-import { connectDB } from "./config/db.js";
+import connectDB from "./config/db.js";
 import { router as usersRouter } from "./routes/users.js";
-import { router as locationsRouter } from "./routes/locations.js";
 import { router as authRouter } from "./routes/auth.js";
+import { router as locationsRouter } from "./routes/locations.js";
 
 const app = express();
 
 // Connect Database
 connectDB();
+
+// Init Middleware
+app.use(express.json({ extended: false }));
 
 app.get("/", (req, res) =>
   res.json({ msg: "Welcome to the Quetzal Consulting App..." }),
@@ -15,9 +18,9 @@ app.get("/", (req, res) =>
 
 // Define Routes
 app.use("/api/users", usersRouter);
-app.use("/api/auth", locationsRouter);
-app.use("/api/locations", authRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/locations", locationsRouter);
 
-const PORT = process.env.PORT || 5000;
+const PORT = 8000;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
