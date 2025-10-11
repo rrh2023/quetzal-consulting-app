@@ -1,5 +1,8 @@
 import express from "express";
 export const router = express.Router();
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import config from "config";
 import { check, validationResult } from "express-validator";
 
 import User from "../models/User.js";
@@ -10,6 +13,7 @@ import User from "../models/User.js";
 router.post(
   "/",
   [
+    // set the check
     check("name", "Please add name").not().isEmpty(),
     check("email", "Please include a valid email").isEmail(),
     check(
@@ -39,7 +43,35 @@ router.post(
         email,
         password,
       });
-    } catch (err) {}
+
+      // encrypt password
+      const salt = await bcrypt.genSalt(10);
+
+      user.password = await bcrypt.hash(password, salt);
+
+      await user.save();
+
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        {
+          expiresIn: 360000,
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        },
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
   },
 );
 
